@@ -1006,21 +1006,6 @@ body.slate .pdf-btn {
     font-size: 1.2rem;
 }
 
-/* Мобильная адаптация */
-@media (max-width: 600px) {
-    #workerTasksList li {
-        font-size: 1rem;
-        padding: 0.75rem;
-    }
-    #workerTasksList li button {
-        padding: 0.4rem 0.6rem;
-        font-size: 0.9rem;
-    }
-    #workerTasksList li button i {
-        font-size: 1rem;
-    }
-}
-
 /* Увеличение размера модального окна для компьютеров */
 @media (min-width: 768px) {
     #workerTasksModal .modal-content {
@@ -1052,35 +1037,6 @@ body.slate .pdf-btn {
     }
 }
 
-/* Сохранение адаптивности для мобильных */
-@media (max-width: 767px) {
-    #workerTasksModal .modal-content {
-        width: 90vw;
-        height: 90vh;
-    }
-
-    #workerTasksModal .modal-scrollable {
-        max-height: calc(90vh - 120px);
-    }
-
-    #workerTasksModal .input-group select,
-    #workerTasksModal .input-group input,
-    #workerTasksModal .input-group textarea,
-    #workerTasksModal .input-group button {
-        padding: 0.5rem;
-        font-size: 0.95rem;
-    }
-
-    #workerTasksModal .input-group textarea {
-        min-height: 80px;
-    }
-
-    #workerTasksModal .filter-group select {
-        padding: 0.4rem;
-        font-size: 0.9rem;
-    }
-}
-
 /* Увеличение модального окна входа для компьютеров */
 @media (min-width: 768px) {
     #authModal .modal-content.auth-content {
@@ -1103,29 +1059,6 @@ body.slate .pdf-btn {
 
     #authModal .password-container {
         margin-bottom: 1rem; /* Отступ между полями */
-    }
-}
-
-/* Адаптивность для мобильных */
-@media (max-width: 767px) {
-    #authModal .modal-content.auth-content {
-        width: 90vw;
-        height: 90vh;
-        padding: 1rem;
-    }
-
-    #authModal .auth-input,
-    #authModal .auth-btn {
-        padding: 0.5rem;
-        font-size: 0.95rem;
-    }
-
-    #authModal .auth-buttons {
-        margin-top: 1rem;
-    }
-
-    #authModal .password-container {
-        margin-bottom: 0.75rem;
     }
 }
 
@@ -1205,33 +1138,6 @@ body.slate .pdf-btn {
     }
 }
 
-/* Адаптивность для мобильных */
-@media (max-width: 767px) {
-    #registerModal .modal-content.auth-content {
-        width: 90vw;
-        height: 90vh;
-        padding: 1rem;
-    }
-
-    #registerModal .modal-scrollable {
-        max-height: calc(90vh - 100px);
-    }
-
-    #registerModal .auth-input,
-    #registerModal .auth-btn {
-        padding: 0.5rem;
-        font-size: 0.95rem;
-    }
-
-    #registerModal .auth-buttons {
-        margin-top: 1rem;
-    }
-
-    #registerModal .password-container {
-        margin-bottom: 0.75rem;
-    }
-}
-
 /* Увеличение модального окна смены пароля для компьютеров */
 @media (min-width: 768px) {
     #passwordModal .modal-content.auth-content {
@@ -1258,33 +1164,6 @@ body.slate .pdf-btn {
 
     #passwordModal .password-container {
         margin-bottom: 1rem;
-    }
-}
-
-/* Адаптивность для мобильных */
-@media (max-width: 767px) {
-    #passwordModal .modal-content.auth-content {
-        width: 90vw;
-        height: 90vh;
-        padding: 1rem;
-    }
-
-    #passwordModal .modal-scrollable {
-        max-height: calc(90vh - 100px);
-    }
-
-    #passwordModal .auth-input,
-    #passwordModal .auth-btn {
-        padding: 0.5rem;
-        font-size: 0.95rem;
-    }
-
-    #passwordModal .auth-buttons {
-        margin-top: 1rem;
-    }
-
-    #passwordModal .password-container {
-        margin-bottom: 0.75rem;
     }
 }
 
