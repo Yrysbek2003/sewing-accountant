@@ -1684,6 +1684,16 @@ const UIManager = {
         if (yearSelect) yearSelect.innerHTML = yearOptions;
         if (dashboardYearSelect) dashboardYearSelect.innerHTML = yearOptions;
         if (salaryYearSelect) salaryYearSelect.innerHTML = yearOptions;
+
+        // Заполнение месяцев
+        const monthSelect = document.getElementById('analyticsMonth');
+        if (monthSelect) {
+            monthSelect.innerHTML = Array.from({ length: 12 }, (_, i) => 
+                `<option value="${i}">${Translations[this.currentLanguage][`month_${i}`]}</option>`
+            ).join('');
+            monthSelect.value = new Date().getMonth(); // Устанавливаем текущий месяц по умолчанию
+        }
+
         if (sortedYears.length > 0) {
             const latestYear = sortedYears[0];
             if (yearSelect) yearSelect.value = latestYear;
@@ -1738,7 +1748,7 @@ const UIManager = {
         const category = document.getElementById('analyticsCategory')?.value || 'all';
         const data = DataManager.getUserData();
         const datasets = [];
-    
+
         const filterItems = (items) => {
             if (filterType === 'all') return items;
             return items.filter(item => {
@@ -1751,7 +1761,7 @@ const UIManager = {
                 return true;
             });
         };
-    
+
         const categories = category === 'all' ? ['purchases', 'sales', 'expenses', 'salaries', 'tax', 'social', 'vat', 'profit'] : [category];
         const colors = {
             purchases: '#f87171',
@@ -1763,10 +1773,12 @@ const UIManager = {
             vat: '#3b82f6',
             profit: '#10b981'
         };
-    
+
         let labels = [];
         if (filterType === 'month') {
-            labels = [Translations[this.currentLanguage][`month_${parseInt(month)}`]];
+            // Рассчитываем количество дней в выбранном месяце
+            const daysInMonth = new Date(year, parseInt(month) + 1, 0).getDate();
+            labels = Array.from({ length: daysInMonth }, (_, i) => `${i + 1}`);
         } else if (filterType === 'year') {
             labels = [
                 Translations[this.currentLanguage].jan,
@@ -1789,49 +1801,66 @@ const UIManager = {
             });
             labels = Array.from(years).sort((a, b) => a - b).map(year => `${year}`);
         }
-    
+
         categories.forEach(cat => {
-            const catData = filterType === 'month' ? [0] : filterType === 'year' ? Array(12).fill(0) : Array(labels.length).fill(0);
+            const catData = filterType === 'month' ? Array(new Date(year, parseInt(month) + 1, 0).getDate()).fill(0) :
+                            filterType === 'year' ? Array(12).fill(0) :
+                            Array(labels.length).fill(0);
+
             if (cat === 'purchases') {
                 filterItems(data.purchases).forEach(item => {
                     const date = new Date(item.date);
-                    const index = filterType === 'month' ? 0 : filterType === 'year' ? date.getMonth() : labels.indexOf(`${date.getFullYear()}`);
+                    const index = filterType === 'month' ? date.getDate() - 1 :
+                                filterType === 'year' ? date.getMonth() :
+                                labels.indexOf(`${date.getFullYear()}`);
                     if (index >= 0) catData[index] += item.cost / DataManager.exchangeRates[this.currentCurrency];
                 });
             } else if (cat === 'sales') {
                 filterItems(data.sales).forEach(item => {
                     const date = new Date(item.date);
-                    const index = filterType === 'month' ? 0 : filterType === 'year' ? date.getMonth() : labels.indexOf(`${date.getFullYear()}`);
+                    const index = filterType === 'month' ? date.getDate() - 1 :
+                                filterType === 'year' ? date.getMonth() :
+                                labels.indexOf(`${date.getFullYear()}`);
                     if (index >= 0) catData[index] += item.amount / DataManager.exchangeRates[this.currentCurrency];
                 });
             } else if (cat === 'expenses') {
                 filterItems(data.expenses).forEach(item => {
                     const date = new Date(item.date);
-                    const index = filterType === 'month' ? 0 : filterType === 'year' ? date.getMonth() : labels.indexOf(`${date.getFullYear()}`);
+                    const index = filterType === 'month' ? date.getDate() - 1 :
+                                filterType === 'year' ? date.getMonth() :
+                                labels.indexOf(`${date.getFullYear()}`);
                     if (index >= 0) catData[index] += item.cost / DataManager.exchangeRates[this.currentCurrency];
                 });
             } else if (cat === 'salaries') {
                 filterItems(data.salaries).forEach(item => {
                     const date = new Date(item.date);
-                    const index = filterType === 'month' ? 0 : filterType === 'year' ? date.getMonth() : labels.indexOf(`${date.getFullYear()}`);
+                    const index = filterType === 'month' ? date.getDate() - 1 :
+                                filterType === 'year' ? date.getMonth() :
+                                labels.indexOf(`${date.getFullYear()}`);
                     if (index >= 0) catData[index] += item.grossSalary / DataManager.exchangeRates[this.currentCurrency];
                 });
             } else if (cat === 'tax') {
                 filterItems(data.salaries).forEach(item => {
                     const date = new Date(item.date);
-                    const index = filterType === 'month' ? 0 : filterType === 'year' ? date.getMonth() : labels.indexOf(`${date.getFullYear()}`);
+                    const index = filterType === 'month' ? date.getDate() - 1 :
+                                filterType === 'year' ? date.getMonth() :
+                                labels.indexOf(`${date.getFullYear()}`);
                     if (index >= 0) catData[index] += item.tax / DataManager.exchangeRates[this.currentCurrency];
                 });
             } else if (cat === 'social') {
                 filterItems(data.salaries).forEach(item => {
                     const date = new Date(item.date);
-                    const index = filterType === 'month' ? 0 : filterType === 'year' ? date.getMonth() : labels.indexOf(`${date.getFullYear()}`);
+                    const index = filterType === 'month' ? date.getDate() - 1 :
+                                filterType === 'year' ? date.getMonth() :
+                                labels.indexOf(`${date.getFullYear()}`);
                     if (index >= 0) catData[index] += item.social / DataManager.exchangeRates[this.currentCurrency];
                 });
             } else if (cat === 'vat') {
                 filterItems(data.sales).forEach(item => {
                     const date = new Date(item.date);
-                    const index = filterType === 'month' ? 0 : filterType === 'year' ? date.getMonth() : labels.indexOf(`${date.getFullYear()}`);
+                    const index = filterType === 'month' ? date.getDate() - 1 :
+                                filterType === 'year' ? date.getMonth() :
+                                labels.indexOf(`${date.getFullYear()}`);
                     if (index >= 0) catData[index] += item.vat / DataManager.exchangeRates[this.currentCurrency];
                 });
             } else if (cat === 'profit') {
@@ -1841,27 +1870,37 @@ const UIManager = {
                 const salaries = filterItems(data.salaries);
                 sales.forEach(item => {
                     const date = new Date(item.date);
-                    const index = filterType === 'month' ? 0 : filterType === 'year' ? date.getMonth() : labels.indexOf(`${date.getFullYear()}`);
+                    const index = filterType === 'month' ? date.getDate() - 1 :
+                                filterType === 'year' ? date.getMonth() :
+                                labels.indexOf(`${date.getFullYear()}`);
                     if (index >= 0) catData[index] += item.amount;
                 });
                 purchases.forEach(item => {
                     const date = new Date(item.date);
-                    const index = filterType === 'month' ? 0 : filterType === 'year' ? date.getMonth() : labels.indexOf(`${date.getFullYear()}`);
+                    const index = filterType === 'month' ? date.getDate() - 1 :
+                                filterType === 'year' ? date.getMonth() :
+                                labels.indexOf(`${date.getFullYear()}`);
                     if (index >= 0) catData[index] -= item.cost;
                 });
                 expenses.forEach(item => {
                     const date = new Date(item.date);
-                    const index = filterType === 'month' ? 0 : filterType === 'year' ? date.getMonth() : labels.indexOf(`${date.getFullYear()}`);
+                    const index = filterType === 'month' ? date.getDate() - 1 :
+                                filterType === 'year' ? date.getMonth() :
+                                labels.indexOf(`${date.getFullYear()}`);
                     if (index >= 0) catData[index] -= item.cost;
                 });
                 salaries.forEach(item => {
                     const date = new Date(item.date);
-                    const index = filterType === 'month' ? 0 : filterType === 'year' ? date.getMonth() : labels.indexOf(`${date.getFullYear()}`);
+                    const index = filterType === 'month' ? date.getDate() - 1 :
+                                filterType === 'year' ? date.getMonth() :
+                                labels.indexOf(`${date.getFullYear()}`);
                     if (index >= 0) catData[index] -= (item.grossSalary + item.tax + item.social);
                 });
                 sales.forEach(item => {
                     const date = new Date(item.date);
-                    const index = filterType === 'month' ? 0 : filterType === 'year' ? date.getMonth() : labels.indexOf(`${date.getFullYear()}`);
+                    const index = filterType === 'month' ? date.getDate() - 1 :
+                                filterType === 'year' ? date.getMonth() :
+                                labels.indexOf(`${date.getFullYear()}`);
                     if (index >= 0) catData[index] -= item.vat;
                 });
             }
@@ -1874,7 +1913,7 @@ const UIManager = {
                 tension: 0.4
             });
         });
-    
+
         if (this.analyticsChart) {
             this.analyticsChart.destroy();
         }
@@ -1889,11 +1928,29 @@ const UIManager = {
                 responsive: true,
                 animation: { duration: 1000, easing: 'easeOutQuart' },
                 plugins: {
-                    legend: { display: category === 'all', labels: { color: document.body.classList.contains('dark') ? '#e2e8f0' : '#1a202c' } },
-                    tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.raw} ${this.currentCurrency}` } }
+                    legend: { 
+                        display: category === 'all', 
+                        labels: { color: document.body.classList.contains('dark') ? '#e2e8f0' : '#1a202c' } 
+                    },
+                    tooltip: { 
+                        callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.raw} ${this.currentCurrency}` } 
+                    }
                 },
                 scales: {
-                    y: { beginAtZero: true, ticks: { callback: v => `${v} ${this.currentCurrency}` } }
+                    x: {
+                        ticks: {
+                            // Уменьшаем частоту меток для месяцев с большим количеством дней
+                            maxTicksLimit: 10,
+                            color: document.body.classList.contains('dark') ? '#e2e8f0' : '#1a202c'
+                        }
+                    },
+                    y: { 
+                        beginAtZero: true, 
+                        ticks: { 
+                            callback: v => `${v} ${this.currentCurrency}`,
+                            color: document.body.classList.contains('dark') ? '#e2e8f0' : '#1a202c'
+                        } 
+                    }
                 }
             }
         });
