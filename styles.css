@@ -1305,6 +1305,11 @@ body.slate #partTypeList li {
     margin-bottom: 0.8rem;
 }
 
+#analyticsChart {
+    max-width: 100%;
+    overflow-x: auto; /* Позволяет прокручивать график по горизонтали, если много дней */
+}
+
 @keyframes fadeOut {
     from { opacity: 1; }
     to { opacity: 0; }
